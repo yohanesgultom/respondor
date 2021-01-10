@@ -1,0 +1,7 @@
+__pycache__/
+/venv
+*.pycgr
+*.zip
+*.csv
+config.ini
+local.py
