@@ -17,19 +17,29 @@ These files are required as input for each map/location:
 3. Point of Interests location file (`*.csv`) where each rows contain `name,type,lat,lon`. Example: [data/locations.csv](data/locations.csv)
 4. Risk layer image (`*.png`) from [INARISK.](http://service1.inarisk.bnpb.go.id:6080/arcgis/rest/services/inaRISK) along with some samples of pixel-coordinates pairs of the image (eg. `[199, 151] => [-6.124142, 106.656685]`). Example: [data/risk_layer.png](data/risk_layer.png)
 
+> Make sure the OSM data & Risk Layer Image covers the whole Point of Interests. One way to do it is by using tool like [Umap](http://umap.openstreetmap.fr/) to map lat/lon to a map
+
 ## Preparing data
 
-Generating `*.pycgrc` file and networkx JSON graph using [osmconvert64](http://m.m.i24.cc/osmconvert64) and [OsmToRoadGraph](https://github.com/AndGem/OsmToRoadGraph):
+Generating `*.pycgr/*.pycgrc` file and networkx JSON graph using [osmconvert64](http://m.m.i24.cc/osmconvert64) and [OsmToRoadGraph](https://github.com/AndGem/OsmToRoadGraph):
+
+1. Convert pbf to osm file
 
 ```
-# convert pbf to osm file
 ~/osmconvert64 jakarta.osm.pbf -o=jakarta.osm
 
-# generate pycgrc and networkx json from osm file
+# the result will be jakarta.osm
+```
+
+2. Generate `pycgrc` and networkx `json` from osm file
+
+```
 python run.py -f jakarta.osm -n c -c --networkx
 
 # the result will be jakarta.pycgrc and jakarta_contracted.json
 ```
+
+If there is any error and `*_contracted.json` not generated, use the `*.json` (eg. `jakarta.json`)
 
 ## Setup
 
@@ -95,3 +105,16 @@ Input fields:
 * `network_json_file`: relative/absolute path of the original networkx JSON file
 * `risk_layer_file`: relative/absolute path of the original risk layer image file from INARISK
 * `risk_coordinates_samples`: array of array of risk layer pixel-coordinates pairs (min. 2 pairs)
+
+If we don't want to generate network risk, just remove the fields eg:
+
+
+```
+{
+    "name": "jakarta",
+    "output_dir": "data/jakarta",
+    "network_pycgr_file": "data/jakarta/jakarta.pycgrc",
+    "poi_file": "data/jakarta/jakarta_locations.csv",
+    "network_json_file": "data/jakarta/jakarta_contracted.json"
+}
+```
