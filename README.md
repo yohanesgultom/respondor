@@ -21,9 +21,9 @@ These files are required as input for each map/location:
 
 ## Preparing data
 
-Generating `*.pycgr/*.pycgrc` file and networkx JSON graph using [osmconvert64](http://m.m.i24.cc/osmconvert64) and [OsmToRoadGraph](https://github.com/AndGem/OsmToRoadGraph):
+Get OpenStreetMap file (`*.osm` or `*.pbf`) that covers the expected area. If it is `*.pbf`, use [osmconvert64](http://m.m.i24.cc/osmconvert64) to convert it to `*.osm`. Then generate `*.pycgr/*.pycgrc` file and networkx JSON graph using [OsmToRoadGraph](https://github.com/AndGem/OsmToRoadGraph):
 
-1. Convert pbf to osm file
+1. Convert `*.pbf` to `*.osm` file:
 
 ```
 ~/osmconvert64 jakarta.osm.pbf -o=jakarta.osm
@@ -31,7 +31,7 @@ Generating `*.pycgr/*.pycgrc` file and networkx JSON graph using [osmconvert64](
 # the result will be jakarta.osm
 ```
 
-2. Generate `pycgrc` and networkx `json` from osm file
+2. Generate `*.pycgrc` and networkx `*_contracted.json` from osm file:
 
 ```
 python run.py -f jakarta.osm -n c -c --networkx
@@ -39,7 +39,21 @@ python run.py -f jakarta.osm -n c -c --networkx
 # the result will be jakarta.pycgrc and jakarta_contracted.json
 ```
 
-If there is any error and `*_contracted.json` not generated, use the `*.json` (eg. `jakarta.json`)
+3. If you get error below, it means the graph can not be contracted:
+
+```
+File "/path/OsmToRoadGraph/graph/contract_graph.py", line 98, in _find_edges_to_merge
+    assert False
+```
+
+Run this command instead and use `*.pycgr` and networkx `*.json`:
+
+
+```
+python run.py -f jakarta.osm -n c --networkx
+
+# the result will be jakarta.pycgr and jakarta.json
+```
 
 ## Setup
 
@@ -53,7 +67,7 @@ Setup steps:
 
 The main script for this is `osm_graph.py`. Steps to use it:
 
-* Generate `*.pycgrc` and networkx adjajency `json` using [AndGem/OsmToRoadGraph](https://github.com/AndGem/OsmToRoadGraph). 
+* Generate `*.pycgr/*.pycgrc` and networkx adjajency `*.json/*contracted_.json` using [AndGem/OsmToRoadGraph](https://github.com/AndGem/OsmToRoadGraph). 
 * Create csv files that contains POI details (see example `data/locations.csv`) 
 * Modify `main` block in `osm_graph.py` to pass correct files to the functions
 * Run `python osm_graph.py`
