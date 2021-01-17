@@ -19,7 +19,7 @@ class ImageRiskLookup:
         """
         self.img = Image.open(img_path)
         assert len(samples) > 1, 'min 2 samples required'        
-        assert len(self.img.getpixel((0, 0))) >= 4, 'must be an RGBA image'
+        assert len(self.img.getpixel((0, 0))) >= 4, 'must be an RGBA image'        
         x0, y0 = samples[0][0]
         lat0, lon0 = samples[0][1]
         x1, y1 = samples[1][0]
@@ -76,6 +76,13 @@ class ImageRiskLookup:
         """
         x = self.x0 + (lon-self.lon0) / self.lon_per_x
         y = self.y0 - (lat-self.lat0) / self.lat_per_y
+        max_x, max_y = self.img.size
+        if x < 0 or x > max_x or y < 0 or y > max_y:
+            print(f'WARNING: out of boundary: {lat}, {lon}')
+            print(f'original pixel: {x}, {y}')
+            x = min(max(x, 0), max_x - 1)
+            y = min(max(y, 0), max_y - 1)
+            print(f'adjusted to: {x}, {y}')
         color = self.img.getpixel((x, y))
         return self.rgba_to_risk(color)
 

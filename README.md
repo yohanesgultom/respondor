@@ -69,14 +69,14 @@ The main script for this is `osm_graph.py`. Steps to use it:
 
 * Generate `*.pycgr/*.pycgrc` and networkx adjajency `*.json/*contracted_.json` using [AndGem/OsmToRoadGraph](https://github.com/AndGem/OsmToRoadGraph). 
 * Create csv files that contains POI details (see example `data/locations.csv`) 
-* Modify `main` block in `osm_graph.py` to pass correct files to the functions
-* Run `python osm_graph.py`
 
-or import and run the necessary functions:
+Run `create_subgraph()`:
 
 ```
 python -c "from osm_graph import *; create_subgraph('data/jakarta/jakarta_locations.csv', 'data/jakarta/jakarta_contracted.json', 'data/jakarta/jakarta_subnetwork.json')"
 ```
+
+> This process is computationally extensive because it build subgraph/subnetwork by merging minimal graph for each permutation pairs of PoI in `*locations.csv`
 
 ### Network risk generation
 
@@ -84,11 +84,15 @@ The main script for this is `network_risk.py`. Steps to use it:
 
 * Obtain risk layer image from [INARISK](http://www.arcgis.com/home/webmap/viewer.html?url=http%3A%2F%2Fservice1.inarisk.bnpb.go.id%3A6080%2Farcgis%2Frest%2Fservices%2FinaRISK%2Flayer_bahaya_banjir%2FImageServer&source=sd). Make sure that the background color is white (`RGBA(255, 255, 255, 255)`) to prevent wrong risk calculation. The example will be like `data/risk_layer.png`
 * Estimate min 2 samples of the x/y-lat/lon pairs for conversion (required as one of input in `network_risk.py`)
-* Prepare the `pycgr/pycgrc` file that corresponds to the layer image
-* Modify `main` block in `network_risk.py` to pass correct files to the functions
-* Run `python network_risk.py`
+* Prepare the `*.pycgr/*.pycgrc` file that corresponds to the layer image
 
 > Use more than 2 samples to test/validate the x/y to lat/lon extrapolation
+
+Run `generate_risk_from_pycgr()`:
+
+```
+python -c "from network_risk import *; generate_risk_from_pycgr('data/jakarta/jakarta.pycgrc', 'data/jakarta/jakarta_flood_risk_layer_inarisk.png', [[[199, 151], [-6.124142, 106.656685]],[[72, 392], [-6.288732, 106.569526]],[[355, 463], [-6.336779, 106.763544]]])"
+```
 
 ### End-to-end
 
