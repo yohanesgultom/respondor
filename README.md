@@ -14,7 +14,7 @@ These softwares are required:
 These files are required as input for each map/location:
 
 1. Point of Interest (PoI) location file (`*.csv`) where each rows contain `name,type,lat,lon`. Example: [data/locations.csv](data/locations.csv)
-1. [OpenStreetMap](https://www.openstreetmap.org) file that covers all PoIs in the `*.csv`
+1. [OpenStreetMap](https://www.openstreetmap.org) file (`*.osm` or `*.pbf`) that covers all PoIs in the `*.csv`
 1. Risk layer image (`*.png`) from [INARISK.](http://service1.inarisk.bnpb.go.id:6080/arcgis/rest/services/inaRISK)
 1. Minimal 3 samples of pixel-coordinates pairs of the risk layer image (eg. `[199, 151] => [-6.124142, 106.656685]`). Example: [data/risk_layer.png](data/risk_layer.png)
 
@@ -22,9 +22,7 @@ These files are required as input for each map/location:
 
 ## Preparing data
 
-Get OpenStreetMap file (`*.osm` or `*.pbf`) that covers the expected area. If it is `*.pbf`, use [osmconvert64](http://m.m.i24.cc/osmconvert64) to convert it to `*.osm`. Then generate `*.pycgr/*.pycgrc` file and networkx JSON graph using [OsmToRoadGraph](https://github.com/AndGem/OsmToRoadGraph):
-
-1. Convert `*.pbf` to `*.osm` file:
+First, get OpenStreetMap file (`*.osm` or `*.pbf`) that covers the expected area. If it is `*.pbf`, use [osmconvert64](http://m.m.i24.cc/osmconvert64) to convert it to `*.osm`:
 
 ```
 ~/osmconvert64 jakarta.osm.pbf -o=jakarta.osm
@@ -32,15 +30,17 @@ Get OpenStreetMap file (`*.osm` or `*.pbf`) that covers the expected area. If it
 # the result will be jakarta.osm
 ```
 
-1. Generate `*.pycgrc` and networkx `*_contracted.json` from osm file:
+Then generate `*.pycgr/*.pycgrc` file and `*_contracted.json` (networkx JSON graph) using [OsmToRoadGraph](https://github.com/AndGem/OsmToRoadGraph)
 
 ```
+git clone https://github.com/AndGem/OsmToRoadGraph
+cd OsmToRoadGraph
+pip3 install networkx
 python run.py -f jakarta.osm -n c -c --networkx
 
 # the result will be jakarta.pycgrc and jakarta_contracted.json
 ```
-
-3. If you get error below, it means the graph can not be contracted:
+If you get error below, it means the graph can not be contracted:
 
 ```
 File "/path/OsmToRoadGraph/graph/contract_graph.py", line 98, in _find_edges_to_merge
@@ -48,7 +48,6 @@ File "/path/OsmToRoadGraph/graph/contract_graph.py", line 98, in _find_edges_to_
 ```
 
 Run this command instead and use `*.pycgr` and networkx `*.json`:
-
 
 ```
 python run.py -f jakarta.osm -n c --networkx
