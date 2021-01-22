@@ -1,0 +1,23 @@
+version: '3'
+services:
+
+  respondor:
+    container_name: respondor
+    image: respondor:latest
+    build:
+      context: .
+    depends_on:
+      - postgis
+    volumes:
+      - ./data:/data
+
+  postgis:
+    container_name: postgis
+    image: postgis/postgis:13-master
+    ports:
+      - 5432:5432
+    environment:
+      - ASOMAS_SERVER_MODE=test      
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=respondor

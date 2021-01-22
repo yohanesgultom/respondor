@@ -1,0 +1,9 @@
+.github/
+.git
+firebase-emulator/
+venv/
+__pycache__/
+Dockerfile*
+docker-compose.yml
+config.ini
+config.ini.example
