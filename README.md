@@ -13,7 +13,7 @@ These softwares are required:
 
 These files are required as input for each map/location:
 
-1. Point of Interest (PoI) location file (`*.csv`) where each rows contain `name,type,lat,lon`. Example: [data/locations.csv](data/locations.csv)
+1. Point of Interest (PoI) location file (`*.csv`) where each rows contain `name,type,lat,lon`. Example: [data/locations.csv](data/locations.csv) where `type` is one of `{'village','shelter', 'depot'}` (other than that will be grouped as `others`)
 1. [OpenStreetMap](https://www.openstreetmap.org) file (`*.osm` or `*.pbf`) that covers all PoIs in the `*.csv`
 1. Risk layer image (`*.png`) from [INARISK.](http://service1.inarisk.bnpb.go.id:6080/arcgis/rest/services/inaRISK)
 1. Minimal 3 samples of pixel-coordinates pairs of the risk layer image (eg. `[199, 151] => [-6.124142, 106.656685]`). Example: [data/risk_layer.png](data/risk_layer.png)
