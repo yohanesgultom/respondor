@@ -13,7 +13,7 @@ These softwares are required:
 
 These files are required as input for each map/location:
 
-1. Point of Interest (PoI) location file (`*.csv`) where each rows contain `name,type,lat,lon`. Example: [data/locations.csv](data/locations.csv)
+1. Point of Interest (PoI) location file (`*.csv`) where each rows contain `name,type,lat,lon`. Example: [data/locations.csv](data/locations.csv) where `type` is one of `{'village','shelter', 'depot'}` (other than that will be grouped as `others`)
 1. [OpenStreetMap](https://www.openstreetmap.org) file (`*.osm` or `*.pbf`) that covers all PoIs in the `*.csv`
 1. Risk layer image (`*.png`) from [INARISK.](http://service1.inarisk.bnpb.go.id:6080/arcgis/rest/services/inaRISK)
 1. Minimal 3 samples of pixel-coordinates pairs of the risk layer image (eg. `[199, 151] => [-6.124142, 106.656685]`). Example: [data/risk_layer.png](data/risk_layer.png)
@@ -24,7 +24,7 @@ These files are required as input for each map/location:
 
 First, get OpenStreetMap file (`*.osm` or `*.pbf`) that covers the expected area. If it is `*.pbf`, use [osmconvert64](http://m.m.i24.cc/osmconvert64) to convert it to `*.osm`:
 
-```
+```bash
 ~/osmconvert64 jakarta.osm.pbf -o=jakarta.osm
 
 # the result will be jakarta.osm
@@ -32,7 +32,7 @@ First, get OpenStreetMap file (`*.osm` or `*.pbf`) that covers the expected area
 
 Then generate `*.pycgr/*.pycgrc` file and `*_contracted.json` (networkx JSON graph) using [OsmToRoadGraph](https://github.com/AndGem/OsmToRoadGraph)
 
-```
+```bash
 git clone https://github.com/AndGem/OsmToRoadGraph
 cd OsmToRoadGraph
 pip3 install networkx
@@ -42,14 +42,14 @@ python run.py -f jakarta.osm -n c -c --networkx
 ```
 If you get error below, it means the graph can not be contracted:
 
-```
+```bash
 File "/path/OsmToRoadGraph/graph/contract_graph.py", line 98, in _find_edges_to_merge
     assert False
 ```
 
 Run this command instead and use `*.pycgr` and networkx `*.json`:
 
-```
+```bash
 python run.py -f jakarta.osm -n c --networkx
 
 # the result will be jakarta.pycgr and jakarta.json
@@ -57,9 +57,9 @@ python run.py -f jakarta.osm -n c --networkx
 
 ## Running
 
-Modify `input.json` with the prepared input files location along with minimial 3 samples of pixel-coordinates pairs of the risk layer image:
+Put the prepared data inside `data` subdirectory then modify `input.json` accordingly with minimial 3 samples of pixel-coordinates pairs of the risk layer image (`risk_coordinates_samples`):
 
-```
+```json
 {
     "name": "jakarta",
     "output_dir": "data/jakarta",
@@ -75,7 +75,7 @@ Modify `input.json` with the prepared input files location along with minimial 3
 }
 ```
 
-Input fields:
+Input fields description:
 
 * `name`: name of the area. Will be used as the base name of table and output files
 * `output_dir`: relative/absolute path of the output directory
@@ -88,7 +88,7 @@ Input fields:
 If we don't want to generate network risk, just remove the fields eg:
 
 
-```
+```json
 {
     "name": "jakarta",
     "output_dir": "data/jakarta",
@@ -100,7 +100,7 @@ If we don't want to generate network risk, just remove the fields eg:
 
 Finally run the script using docker:
 
-```
+```bash
 docker-compose run respondor bash -c "python main.py input.json"
 ```
 > The process of creating subgraph is computationally heavy. Depends on the size of the OSM file & the number of PoIs, it could take minutes-hours. 
@@ -152,7 +152,7 @@ Edges of the graph are described by 6 parameters. Each edge is stored in one lin
 * length: the length of the edge in meters (approximated)
 * street_type: one of the OSM highway types (see: https://wiki.openstreetmap.org/wiki/Key:highway)
 * max_speed: maximum allowed speed (if exists) in km/h [note: if no max speed is found a default value will be used]
-* bidirectional: indicates if an edge is bidirectional. The value is 0 if it is a unidirectional road (from source_node_id to target_node_id), and otherwise it is 1.
+* bidirectional: indicates if an edge is bidirectional. The value is 0 if it is a unidirectional road (from source_node_id to target_node_id), and otherwise it is 
 
 ### Network Risk
 
@@ -164,7 +164,7 @@ Definition of columns in `*.pycgr_risk` / `*.pycgrc_risk`:
 1. length: the length of the edge in meters (approximated)
 1. street_type: one of the OSM highway types (see: https://wiki.openstreetmap.org/wiki/Key:highway)
 1. max_speed: maximum allowed speed (if exists) in km/h [note: if no max speed is found a default value will be used]
-1. bidirectional indicates if an edge is bidirectional. The value is 0 if it is a unidirectional road (from source_node_id to target_node_id), and otherwise it is 1.
+1. bidirectional indicates if an edge is bidirectional. The value is 0 if it is a unidirectional road (from source_node_id to target_node_id), and otherwise it is 
 
 ### Node Risk
 
