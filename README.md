@@ -37,7 +37,7 @@ To get the feel of how the program works, complete example input data has been p
 
 1. Extract `example.zip`: `unzip example.zip`
 2. Copy `config.ini.example` to `config.ini` (set `mapbox_access_token` to allow visualization)
-3. Generate subnetwork: `docker-compose run -v ${PWD}/example:/data -v ${PWD}/config.ini:/config.ini respondor python main.py /data/jakarta_input.json`
+3. Generate subnetwork: `docker-compose run -v ${PWD}/example:/example -v ${PWD}/config.ini:/config.ini respondor python main.py /example/jakarta_input.json`
 4. Run subnetwork web viewer on browser: `docker-compose run -v ${PWD}/example:/example -v ${PWD}/config.ini:/config.ini -p 5000:5000 -d respondor python viewer/app.py /example/jakarta_locations.csv /example/jakarta_subnetwork.pycgrc`
 5. View/visualize subnetwork by opening http://localhost:5000 on browser
 6. To shutdown: `docker-compose down -v`
