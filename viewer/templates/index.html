@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset=utf-8 />
+    <title>Network Viewer</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.png') }}">
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+    <script src='https://api.mapbox.com/mapbox.js/v3.3.1/mapbox.js'></script>
+    <link href='https://api.mapbox.com/mapbox.js/v3.3.1/mapbox.css' rel='stylesheet' />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+        
+        .spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            font-size: 50px;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+
+<body>
+    <div id='map'>
+        <h1 class="spinner">Loading...</h1>
+    </div>
+
+    <div>Favicons made by <a href="" title="Good Ware">Good Ware</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+    <script>
+        L.mapbox.accessToken = '{{ MAPBOX_ACCESS_TOKEN }}';
+        const map = L.mapbox.map('map').addLayer(L.mapbox.styleLayer('mapbox://styles/mapbox/streets-v11'));
+
+        // Fetch data
+        fetch('/data')
+            .then((res) => res.json())
+            .then((body) => {
+                // center
+                map.setView(body.center.coords, body.center.zoom);
+
+                // routes
+                body.routes.forEach((route) => {
+                    L.polyline(route.coords, {
+                        color: route.color
+                    }).addTo(map);
+                });
+
+                // nodes
+                body.nodes.forEach((node) => {
+                    L.marker(node.coords, {
+                            riseOnHover: true,
+                            icon: L.mapbox.marker.icon({
+                                'marker-size': node.size,
+                                'marker-symbol': node.symbol,
+                                'marker-color': node.color,
+                            })
+                        })
+                        .on('mouseover', (e) => {
+                            e.sourceTarget.openPopup()
+                        })
+                        .on('mouseout', (e) => {
+                            e.sourceTarget.closePopup()
+                        })
+                        .bindPopup(`<div>${node.type}</div>`)
+                        .addTo(map);
+                })
+            })
+            .catch(console.error);
+    </script>
+</body>
+
+</html>

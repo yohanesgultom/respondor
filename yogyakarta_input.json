@@ -1,9 +1,0 @@
-{
-    "name": "yogyakarta",
-    "output_dir": "data/yogyakarta",
-    "network_pycgr_file": "data/yogyakarta/yogyakarta.pycgrc",
-    "poi_file": "data/yogyakarta/yogyakarta_locations.csv",
-    "network_json_file": "data/yogyakarta/yogyakarta.json",    
-    "risk_layer_file": null,
-    "risk_coordinates_samples": null
-}

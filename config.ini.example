@@ -1,5 +1,6 @@
 [respondor]
-host = localhost
+host = postgis
 user = postgres
 passwd = postgres
 db = respondor
+mapbox_access_token = xxxxxxxxxxxxxxxxxxx

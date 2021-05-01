@@ -1,7 +1,13 @@
 __pycache__/
 /venv
+/example
+/data
 *.pycgr
 *.zip
+*.aux
+*.log
+*.synctex.gz
+!/example.zip
 *.csv
 config.ini
 local.py

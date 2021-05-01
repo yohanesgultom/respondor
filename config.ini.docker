@@ -1,5 +1,0 @@
-[respondor]
-host = postgis
-user = postgres
-passwd = postgres
-db = respondor

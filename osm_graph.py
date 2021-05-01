@@ -22,7 +22,6 @@ import math
 import multiprocessing as mp
 import networkx as nx
 import concurrent.futures
-import matplotlib.pyplot as plt
 from io import StringIO
 from networkx.readwrite import json_graph
 from itertools import combinations, permutations

@@ -9,15 +9,17 @@ services:
     depends_on:
       - postgis
     volumes:
+      - ./config.ini:/config.ini
       - ./data:/data
-
+    ports:
+      - '5000:5000'
+  
   postgis:
     container_name: postgis
     image: postgis/postgis:13-master
     ports:
       - 5432:5432
     environment:
-      - ASOMAS_SERVER_MODE=test      
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=respondor

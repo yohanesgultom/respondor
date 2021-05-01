@@ -1,26 +1,50 @@
-# Respond OR scripts
+# Respond OR Subnetwork Generation
 
-Respond OR related scripts. Sample of input files are available in [Google Drive](https://drive.google.com/drive/folders/1eOyR4GRGnSqLTzOl_rRk7EaK216bSXWH)
+Respond OR subnetwork generation from OpenStreetMap data
+
+![Jakarta's Flood Subnetwork Visualization](doc/subnetwork-visualization.png)
 
 ## Prerequisites
 
-These softwares are required:
+For data preparation:
 
-* Docker >= 19.x
-* Docker-compose >= 1.26.x
 * [OsmToRoadGraph](https://github.com/AndGem/OsmToRoadGraph) (to generate graph from `*.osm`)
 * [osmconvert64](http://m.m.i24.cc/osmconvert64) (to convert `*.pbf` to `*.osm`)
 
-These files are required as input for each map/location:
+To run the subnetwork generation & visualization:
 
-1. Point of Interest (PoI) location file (`*.csv`) where each rows contain `name,type,lat,lon`. Example: [data/locations.csv](data/locations.csv) where `type` is one of `{'village','shelter', 'depot'}` (other than that will be grouped as `others`)
-1. [OpenStreetMap](https://www.openstreetmap.org) file (`*.osm` or `*.pbf`) that covers all PoIs in the `*.csv`
-1. Risk layer image (`*.png`) from [INARISK.](http://service1.inarisk.bnpb.go.id:6080/arcgis/rest/services/inaRISK)
-1. Minimal 3 samples of pixel-coordinates pairs of the risk layer image (eg. `[199, 151] => [-6.124142, 106.656685]`). Example: [data/risk_layer.png](data/risk_layer.png)
+* Docker >= 19.x
+* Docker-compose >= 1.26.x
+* [Mapbox Access Token](https://docs.mapbox.com/help/getting-started/access-tokens/) (optional. To visualize subnetwork over map) 
 
-> Make sure the OSM data & Risk Layer Image covers the whole Point of Interests. One way to do it is by using tool like [Umap](http://umap.openstreetmap.fr/) to map lat/lon to a map
+These files are required as input:
 
-## Preparing data
+1. **Point of Interest (PoI) location file**. A CSV file where each rows contain `name,type,lat,lon` and `type` is one of `{'village','shelter','depot'}` (other than that will be grouped as `others`). Example: `example.zip/jakarta_locations.csv`
+2. **[OpenStreetMap](https://www.openstreetmap.org) file**. An `*.osm` or `*.pbf` file that includes all PoIs/locations (example [Jakarta.pbf](http://openstreetmap.id/data/pbf/Jakarta.pbf)) which needs to be converted to `*.pycgrc` & `*_contracted.json` files using [OsmToRoadGraph](https://github.com/AndGem/OsmToRoadGraph). Example: `example.zip/jakarta.pycgrc` & `example.zip/jakarta_contracted.json`
+3. **Risk layer image**. A PNG from [INARISK.](http://service1.inarisk.bnpb.go.id:6080/arcgis/rest/services/inaRISK). Example: `example.zip/jakarta_flood_risk_layer_inarisk.png`
+4. **Pixel-to-coordinates pairs data**. Minimal 3 samples of pixel-to-coordinates pairs of the risk layer image (eg. `[199, 151] => [-6.124142, 106.656685]`). We can get these samples by comparing the risk layer with the actual map from INARISK eg. `example.zip/jakarta_inarisk.png`
+
+Tips:
+
+* To make sure the OSM data & Risk Layer Image covers the whole Point of Interests, we can use tool like [Umap](http://umap.openstreetmap.fr/) to map lat/lon to a map
+* The INARISK's ArcGIS application has a tool to show lat/lng of a point in a map (from the map click Measure > Location)
+
+![INARISK Measure Location Tool](doc/inarisk-arcgis-measure-location-tool.png)
+
+## Demo
+
+To get the feel of how the program works, complete example input data has been provided in [example.zip](example.zip). Follow this steps below to generate the subnetwork of Jakarta's Flood disaster (commands to be run on Linux bash):
+
+1. Extract `example.zip`: `unzip example.zip`
+2. Copy `config.ini.example` to `config.ini` (set `mapbox_access_token` to allow visualization)
+3. Generate subnetwork: `docker-compose run -v ${PWD}/example:/data -v ${PWD}/config.ini:/config.ini respondor python main.py /data/jakarta_input.json`
+4. Run subnetwork web viewer on browser: `docker-compose run -v ${PWD}/example:/example -v ${PWD}/config.ini:/config.ini -p 5000:5000 -d respondor python viewer/app.py /example/jakarta_locations.csv /example/jakarta_subnetwork.pycgrc`
+5. View/visualize subnetwork by opening http://localhost:5000 on browser
+6. To shutdown: `docker-compose down -v`
+
+> The subnetwork generation process is computationally heavy. Depends on the size of the OSM file, the number of PoIs, and number of CPU cores, it could take minutes-hours. 
+
+## Data Preparation
 
 First, get OpenStreetMap file (`*.osm` or `*.pbf`) that covers the expected area. If it is `*.pbf`, use [osmconvert64](http://m.m.i24.cc/osmconvert64) to convert it to `*.osm`:
 
@@ -55,18 +79,18 @@ python run.py -f jakarta.osm -n c --networkx
 # the result will be jakarta.pycgr and jakarta.json
 ```
 
-## Running
+## Input Description
 
-Put the prepared data inside `data` subdirectory then modify `input.json` accordingly with minimial 3 samples of pixel-coordinates pairs of the risk layer image (`risk_coordinates_samples`):
+The main input in for the subnetwork generation the example, `jakarta_input.json` is as follow:
 
 ```json
 {
     "name": "jakarta",
-    "output_dir": "data/jakarta",
-    "network_pycgr_file": "data/jakarta/jakarta.pycgrc",
-    "poi_file": "data/jakarta/jakarta_locations.csv",
-    "network_json_file": "data/jakarta/jakarta_contracted.json",    
-    "risk_layer_file": "data/jakarta/jakarta_flood_risk_layer_inarisk.png",
+    "output_dir": "example",
+    "network_pycgr_file": "example/jakarta.pycgrc",
+    "poi_file": "example/jakarta_locations.csv",
+    "network_json_file": "example/jakarta_contracted.json",    
+    "risk_layer_file": "example/jakarta_flood_risk_layer_inarisk.png",
     "risk_coordinates_samples": [
         [[199, 151], [-6.124142, 106.656685]],
         [[72, 392], [-6.288732, 106.569526]],
@@ -98,14 +122,7 @@ If we don't want to generate network risk, just remove the fields eg:
 }
 ```
 
-Finally run the script using docker:
-
-```bash
-docker-compose run respondor bash -c "python main.py input.json"
-```
-> The process of creating subgraph is computationally heavy. Depends on the size of the OSM file & the number of PoIs, it could take minutes-hours. 
-
-## Output
+## Output Description
 
 The output of the end-to-end process will be:
 
