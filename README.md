@@ -8,8 +8,8 @@ Respond OR subnetwork generation from OpenStreetMap data
 
 For data preparation:
 
-* [OsmToRoadGraph](https://github.com/AndGem/OsmToRoadGraph) (to generate graph from `*.osm`)
 * [osmconvert64](http://m.m.i24.cc/osmconvert64) (to convert `*.pbf` to `*.osm`)
+* [OsmToRoadGraph](https://github.com/AndGem/OsmToRoadGraph) (to generate graph from `*.osm`)
 
 To run the subnetwork generation & visualization:
 
@@ -20,7 +20,7 @@ To run the subnetwork generation & visualization:
 These files are required as input:
 
 1. **Point of Interest (PoI) location file**. A CSV file where each rows contain `name,type,lat,lon` and `type` is one of `{'village','shelter','depot'}` (other than that will be grouped as `others`). Example: `example.zip/jakarta_locations.csv`
-2. **[OpenStreetMap](https://www.openstreetmap.org) file**. An `*.osm` or `*.pbf` file that includes all PoIs/locations (example [Jakarta.pbf](http://openstreetmap.id/data/pbf/Jakarta.pbf)) which needs to be converted to `*.pycgrc` & `*_contracted.json` files using [OsmToRoadGraph](https://github.com/AndGem/OsmToRoadGraph). Example: `example.zip/jakarta.pycgrc` & `example.zip/jakarta_contracted.json`
+2. **[OpenStreetMap](https://www.openstreetmap.org) file**. An `*.osm` or `*.pbf` file that includes all PoIs/locations (example [Jakarta.pbf](http://openstreetmap.id/data/pbf/Jakarta.pbf)) which needs to be converted to `*.pycgrc` & `*_contracted.json` files using [osmconvert64](http://m.m.i24.cc/osmconvert64) & [OsmToRoadGraph](https://github.com/AndGem/OsmToRoadGraph). Example: `example.zip/jakarta.pycgrc` & `example.zip/jakarta_contracted.json`
 3. **Risk layer image**. A PNG from [INARISK.](http://service1.inarisk.bnpb.go.id:6080/arcgis/rest/services/inaRISK). Example: `example.zip/jakarta_flood_risk_layer_inarisk.png`
 4. **Pixel-to-coordinates pairs data**. Minimal 3 samples of pixel-to-coordinates pairs of the risk layer image (eg. `[199, 151] => [-6.124142, 106.656685]`). We can get these samples by comparing the risk layer with the actual map from INARISK eg. `example.zip/jakarta_inarisk.png`
 

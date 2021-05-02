@@ -1,0 +1,99 @@
+time docker-compose run -v ${PWD}/example:/example -v ${PWD}/config.ini:/conf
+ig.ini respondor python main.py /example/jakarta/jakarta_input.json
+Starting postgis ... done
+reading example/jakarta/jakarta.pycgrc   
+copying 160761 locations and 215579 routes data to database
+completed
+reading file example/jakarta/jakarta_locations.csv
+reading POI file example/jakarta/jakarta_locations.csv
+reading graph file example/jakarta/jakarta_contracted.json
+creating subgraph
+* getting the shortest paths of 117992.0 permutations
+* create subgraph from the longest induced path
+subgraph saved in example/jakarta/jakarta_subnetwork.json
+reading graph file example/jakarta/jakarta_subnetwork.json
+160760
+reading locations
+reading pycgr
+rewriting pycgr
+rewriting locations
+reading and grouping node ids by category
+creating map to new index
+adding new node index to location example/jakarta/jakarta_locations.csv
+reading example/jakarta/jakarta.pycgrc
+reading example/jakarta/jakarta_subnetwork.pycgrc
+
+real    25m55,014s
+user    0m0,436s
+sys     0m0,073s
+
+---
+
+time docker-compose run -v ${PWD}/example:/example -v ${PWD}/config.ini:/config.ini respondor python main.py /example/lombok/lombok_input.json
+unusual: 191 PRINGGABAYA -8.5363927 116.6540193
+unusual: 197 REMBITAN -8.8609432 116.3003135
+unusual: 213 SELAPARANG -8.5127116 116.602957
+unusual: 241 SUGIAN -8.3258998 116.6651207
+unusual: 243 SUKADANA -8.8556178 116.3101834
+unusual: 250 SUNTALANGU -8.5195066 116.5844918
+unusual: 259 TANJUNG -8.6608705 116.5639347
+unusual: 267 TERUWAI -8.8356838 116.3565708
+unusual: 268 TIRTANADI -8.6020886 116.6004623
+unusual: 270 TUMPAK -8.8829775 116.2553701
+unusual: 277 KANTOR CAMAT SAMBELIA -8.379019 116.688125
+unusual: 279 LAP SUELA -8.523415 116.575254
+unusual: 284 LAPANGAN SAMBELIA -8.388117 116.70646
+unusual: 435 BAGEK GAET, POHGADING TIMUR -8.5801789 116.6305781
+unusual: 438 DUSUN RUMBUK & PADAMARA, DESA BATUYANG PRINGGABAYA, LOMBOK TIMUR -8.570115279 116.6240788
+unusual: 442 MASJID POHGADING -8.5528286 116.6104859
+unusual: 444 PUSKESMAS BATUYANG -8.564971 116.623551
+unusual: 445 BATUYANG DAYA -8.565042 116.6208181
+unusual: 446 SUELA - LOMBOK TIMUR -8.5269325 116.5674998
+unusual: 448 SD 1 BATUYANG, PRINGGABAYA -8.5647127 116.6240756
+unusual: 449 DESA POH GADING -8.5684259 116.6223153
+unusual: 450 GANG NURUL IMAN, POHGADING, PRINGGABAYA -8.5716048 116.6248336
+unusual: 451 GB LAUK, RT 19 POHGADING GANG NURUL IMAN KEC PRINGGABAYA -8.5716048 116.6248336
+unusual: 452 DUSUN RUMBUK & PADAMARA,DESA BATUYANG ,KEC.PRINGGABAYA ,KAB.LOMBOK TIMUR -8.5642829 116.628444
+unusual: 455 GUBUQ TIMUQ -8.5672614 116.6229844
+unusual: 456 SDN 1 BATUYANG, PRINGGABAYA -8.5717358 116.6129867
+unusual: 462 GUDANG HALIM BNPB -6.246027 106.8153622
+unusual: 474 HALIM PERDANA KUSUMA AIRPORT -6.2653312 106.8823846
+unusual: 476 PELABUHAN KAYANGAN -8.4867027 116.6739366
+unusual: 477 PELABUHAN BIMA -8.448809 118.7141295
+unusual: 478 PELABUHAN SUMBAWA -8.4857053 116.6745908
+reading example/lombok/lombok.pycgrc
+copying 88439 locations and 103805 routes data to database
+completed
+reading file example/lombok/lombok_locations.csv
+reading POI file example/lombok/lombok_locations.csv
+reading graph file example/lombok/lombok_contracted.json
+creating subgraph
+* getting the shortest paths of 210222.0 permutations
+* create subgraph from the longest induced path
+subgraph saved in example/lombok/lombok_subnetwork.json
+reading graph file example/lombok/lombok_subnetwork.json
+88438
+reading locations
+reading pycgr
+rewriting pycgr
+rewriting locations
+reading and grouping node ids by category
+creating map to new index
+adding new node index to location example/lombok/lombok_locations.csv
+reading example/lombok/lombok.pycgrc
+reading example/lombok/lombok_subnetwork.pycgrc
+
+real    164m36,050s
+user    0m0,446s
+sys     0m0,076s
+
+---
+
+time docker-compose run -v ${PWD}/example:/example -v ${PWD}/config.ini:/config.ini respondor python main.py /example/yogyakarta/yogyakarta_input.json
+
+reading example/yogyakarta/yogyakarta_subnetwork.pycgrc
+
+real    23m8,410s
+user    0m0,556s
+sys     0m0,096s
+
