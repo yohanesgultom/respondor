@@ -87,7 +87,7 @@ OpenStreetMap.id is a website that provides extracted OSM data for most province
 InaRISK\cite{Bnpb2016Inarisk} is a public Geographic Information System provided by The National Agency for Disaster Countermeasure (BNPB) of Indonesia which was launched in 2016. This system provides information about the disaster risk index of all regions in Indonesia in a form of colored map layer as shown in Figure \ref{fig_jakarta_flood_risk_layer_inarisk}.
 
 \begin{figure}
-\centerline{\includegraphics[scale=0.3]{jakarta_flood_risk_layer_inarisk.png}}
+\centerline{\includegraphics[scale=0.35]{jakarta_flood_risk_layer_inarisk.png}}
 \caption{Jakarta flood disaster risk index from INARISK}
 \label{fig_jakarta_flood_risk_layer_inarisk}
 \end{figure}
@@ -251,7 +251,26 @@ Based on the result of our experiments, we concluded that the processing time is
 \item \textbf{The area of the map}. Operation map with bigger area most of the time has a number of POI separated by long distance. The longer the distance, the more number of nodes that need to be processed during the shortest path finding which eventually increses the processing time
 \end{enumerate}
 
-In order to be able to validate the generated network easily, we created as simple web server to visualize the subnetwork on top of interactive map from \url{https://mapbox.com}. The visualization of partial of subnetwork for Jakarta flood (2013) is shown in Figure \ref{fig_jakarta_subnetwork_visualized}. The blue lines represent the available roads. While the icons represent the locations/POI: 
+\begin{figure}
+\centerline{\includegraphics[scale=0.25]{subnetwork-visualization-zoom-1-yogyakarta.png}}
+\caption{Visualization of Yogyakarta's subnetwork during earthquake disaster in 2020}
+\label{fig_yogyakarta_subnetwork_visualized}
+\end{figure}
+
+\begin{figure}
+\centerline{\includegraphics[scale=0.25]{subnetwork-visualization-zoom-1-jakarta.png}}
+\caption{Visualization of Jakarta's subnetwork during flood disaster in 2013}
+\label{fig_jakarta_subnetwork_visualized}
+\end{figure}
+
+\begin{figure}
+\centerline{\includegraphics[scale=0.25]{subnetwork-visualization-zoom-1-lombok.png}}
+\caption{Visualization of Lombok's subnetwork during earthquake disaster in 2018}
+\label{fig_lombok_subnetwork_visualized}
+\end{figure}
+
+
+In order to be able to validate the generated network easily, we created as simple web server to visualize the subnetwork on top of interactive map from \url{https://mapbox.com}. The visualization of partial of subnetwork for Yogyakarta earthquake (2020), Jakarta flood (2013), and Lombok earthquake (2018) are shown respectively in Figure \ref{fig_yogyakarta_subnetwork_visualized}, Figure \ref{fig_jakarta_subnetwork_visualized}, and Figure \ref{fig_lombok_subnetwork_visualized}. The blue lines represent the available roads. While the icons represent the locations/POI: 
 
 \begin{itemize}
 \item Yellow icon for village
@@ -261,12 +280,6 @@ In order to be able to validate the generated network easily, we created as simp
 \item Red icon for damaged infrastructure
 \end{itemize}
 
-\begin{figure}
-\centerline{\includegraphics[scale=0.24]{subnetwork-visualization-zoom-1.png}}
-\caption{Visualization of Jakarta's subnetwork during flood disaster}
-\label{fig_jakarta_subnetwork_visualized}
-\end{figure}
-
 
 \section{Conclusion}
 
@@ -274,6 +287,9 @@ Our proposed system was able to generate route subnetwork for all given operatio
 
 Since the number of the POI in each operation is usually more than number of cores of CPU available in market, we'd suggest to integrate the method of running the shortest-path finding algorithm in Graphics Processing Unit (GPU) which has hundreds to thousands of cores \cite{harish2007accelerating}.
 
+\section*{Acknowledgment}
+
+This research was supported by the RESPOND-OR project\footnote{\url{https://www.lancaster.ac.uk/lums/research/areas-of-expertise/centre-for-transport-and-logistics/projects/respond-or/}}, which is led by Lancaster University, Centre for Transport and Logistics (CENTRAL), in partnership with Universitas Indonesia, Universitas Gadjah Mada and the University of Khartoum. This project is also supported by an Advisory Committee of stakeholders from government and non-government organizations in Indonesia and Sudan to ensure the alignment of the scientific activities, project results and deliverables to the stakeholders’ needs.
 
 \bibliographystyle{IEEEtran}
 \bibliography{references}
