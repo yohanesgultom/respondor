@@ -92,19 +92,58 @@ InaRISK\cite{Bnpb2016Inarisk} is a public Geographic Information System provided
 \label{fig_jakarta_flood_risk_layer_inarisk}
 \end{figure}
 
+\begin{figure*}
+\centerline{\includegraphics[scale=0.6]{system-flowchart.png}}
+\caption{End-to-end network generation system flowchart}
+\label{fig_system_flowchart}
+\end{figure*}
+
 OsmToRoadGraph\cite{Gemsa2017OsmToRoadGraph} is an opensource tool to generate graph/network from raw OSM data. Since the OpenStreetMap.id only provides PBF file, we will need additional tool called Osmconvert\cite{OpenStreetMap2019OsmConvert} to convert PBF to OSM before using OsmToRoadGraph to generate graph/network data in PYCGR/PYCGRC and JSON format.
 
 PostGIS\cite{postgis2019postgis} is an spatial data extension of one of the most popular opensource database, PostgreSQL\cite{postgresql1996postgresql}. PostGIS allows us to map each POI provided by user to their nearest node in PYCGR file. The only thing left to solve is to remove unecessary nodes and routes from the graph to reduce the size of final input data for the model.
 
 NetworkX\cite{SciPyProceedings_11} is an opensource Python package that provides data structure and APIs for complex graph search and manipulations. This package provides a way to remove unecessary nodes and routes in order to generate minimized subnetwork/subgraph suitable for modelling.
 
-
 \section{Methodology}
 
+\bgroup
+\def\arraystretch{1.5}
+\begin{table*}[htbp]
+\caption{Experiment Results}
+\begin{center}
+\begin{tabular}{|c|l|c|c|c|c|c|c|}
+\hline
+\multicolumn{1}{|c|}{\multirow{2}{*}{\textbf{No}}} & 
+\multicolumn{1}{c|}{\multirow{2}{*}{\textbf{Operation}}} & 
+\multicolumn{1}{c|}{\multirow{2}{*}{\textbf{Area ($km^2$)}}} & 
+\multicolumn{1}{c|}{\multirow{2}{*}{\textbf{\# POI}}} & 
+\multicolumn{2}{c|}{\textbf{\% Reduction}} & 
+\multicolumn{2}{c|}{\textbf{Avg Processing Time}} \\
+%\multirow{2}{*}{\vtop{\hbox{\strut \textbf{Avg Processing Time}}\hbox{\strut \textbf{AMD 3970X (minutes)}}}} &
+%\multirow{2}{*}{\vtop{\hbox{\strut \textbf{Avg Processing Time}}\hbox{\strut \textbf{i7 5500U (minutes)}}}} \\ 
+\cline{5-8}
+\multicolumn{1}{|c|}{} & 
+\multicolumn{1}{c|}{} & 
+\multicolumn{1}{c|}{} & 
+\multicolumn{1}{c|}{} & 
+\multicolumn{1}{c|}{\textbf{Nodes}} & 
+\multicolumn{1}{c|}{\textbf{Routes/Edges}} & 
+\multicolumn{1}{c|}{\textbf{AMD 3970X}} &
+\multicolumn{1}{c|}{\textbf{i7 5500U}} \\ 
+\hline
+1 & Yogyakarta earthquake (2020)	& 32.5		& 182 & 	97.4\% & 97.5\% 	& 23.24 & 39.35 \\ \hline
+2 & Jakarta flood (2013) 			& 661.5		& 346 & 	82.0\%	& 84.2\% 	& 26.01 & 43.88 \\ \hline
+3 & Lombok earthquake (2018) 		& 4,725.0	& 480 & 	77.0\%	& 78.1\% 	& 166.70 & 268.77 \\ \hline
+\end{tabular}
+\label{table_experiment_results}
+\end{center}
+\end{table*}
+\egroup
+
 \begin{figure*}
-\centerline{\includegraphics[scale=0.6]{system-flowchart.png}}
-\caption{End-to-end network generation system flowchart}
-\label{fig_system_flowchart}
+\centerline{\includegraphics[scale=0.5]{average-processing-time-chart.png}}
+\caption{Comparison of average processing time on two computers}
+\label{fig_average_processing_time_chart}
 \end{figure*}
 
 In a nutshell, the methodology that we propose is combining related tools into a new system to generate route subnetwork from POI of emergency response operation. The flowchart of the system is shown in Figure \ref{fig_system_flowchart}.
@@ -162,56 +201,8 @@ Additionally we also provide a simple webserver that render the subnetwork on to
 
 The source code of our proposed system along with its usage guide are currently published in a publicly accessible code repository https://github.com/yohanesgultom/respondor.
 
+
 \section{Experiments}
-
-\bgroup
-\def\arraystretch{1.5}
-\begin{table*}[htbp]
-\caption{Experiment Results}
-\begin{center}
-\begin{tabular}{|c|l|c|c|c|c|c|}
-\hline
-\multicolumn{1}{|c|}{\multirow{2}{*}{\textbf{No}}} & 
-\multicolumn{1}{c|}{\multirow{2}{*}{\textbf{Operation}}} & 
-\multicolumn{1}{c|}{\multirow{2}{*}{\textbf{Area ($km^2$)}}} & 
-\multicolumn{1}{c|}{\multirow{2}{*}{\textbf{\# POI}}} & 
-\multicolumn{2}{c|}{\textbf{\% Reduction}} & 
-\multirow{2}{*}{\vtop{\hbox{\strut \textbf{Avg Processing}}\hbox{\strut \textbf{Time (min)}}}} \\ 
-\cline{5-6}
-\multicolumn{1}{|c|}{} & 
-\multicolumn{1}{c|}{} & 
-\multicolumn{1}{c|}{} & 
-\multicolumn{1}{c|}{} & 
-\multicolumn{1}{c|}{\textbf{Nodes}} & 
-\multicolumn{1}{c|}{\textbf{Routes/Edges}} & 
-\multicolumn{1}{c|}{} \\ 
-\hline
-1 & Yogyakarta earthquake (2020)	& 32.5		& 182 & 	97.4\% & 97.5\% 	& 23.24 \\ \hline
-2 & Jakarta flood (2013) 			& 661.5		& 346 & 	82.0\%	& 84.2\% 	& 26.01 \\ \hline
-3 & Lombok earthquake (2018) 		& 4,725.0	& 480 & 	77.0\%	& 78.1\% 	& 166.70 \\ \hline
-\end{tabular}
-\label{table_experiment_results}
-\end{center}
-\end{table*}
-\egroup
-
-%\bgroup
-%\def\arraystretch{1.5}
-%\begin{table*}[htbp]
-%\caption{Experiment Results}
-%\begin{center}
-%\begin{tabular}{|c|l|c|c|c|c|c|c|c|c|}
-%\hline
-%\multicolumn{1}{|c|}{\multirow{2}{*}{\textbf{No}}} & \multicolumn{1}{c|}{\multirow{2}{*}{\textbf{Operation}}} & \multicolumn{1}{c|}{\multirow{2}{*}{\textbf{\# POI}}} & \multicolumn{2}{c|}{\textbf{Full Network (input)}} & \multicolumn{2}{c|}{\textbf{Subnetwork (output)}}  & \multicolumn{2}{c|}{\textbf{\% Reduction}} & \multirow{2}{*}{\vtop{\hbox{\strut \textbf{Avg Processing}}\hbox{\strut \textbf{Time (Minutes)}}}} \\ \cline{4-9}
-%\multicolumn{1}{|c|}{} & \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{}                            & \multicolumn{1}{c|}{\textbf{\# Nodes}} & \multicolumn{1}{c|}{\textbf{\# Routes/Edges}} & \multicolumn{1}{c|}{\textbf{\# Nodes}} & \multicolumn{1}{c|}{\textbf{\#  Routes/Edges}} & \multicolumn{1}{c|}{\textbf{Nodes}} & \multicolumn{1}{c|}{\textbf{Routes/Edges}} & \\ \hline
-%1 & Yogyakarta earthquake (2020) 	& 182 & 725,828 	& 768,193 	& 18,607	& 19,202	& 97.4\% & 97.5\% 	& 23.24 \\ \hline
-%2 & Jakarta flood (2013) 			& 346 & 160,761 	& 215,579 	& 28,929 	& 34,091	& 82.0\%	& 84.2\% 	& 26.01 \\ \hline
-%3 & Lombok earthquake (2018) 		& 480 & 88,439 		& 103,805	& 20,328 	& 22,708	& 77.0\%	& 78.1\% 	& 166.70 \\ \hline
-%\end{tabular}
-%\label{table_experiment_results}
-%\end{center}
-%\end{table*}
-%\egroup
 
 In order to validate and test performance of our proposed system, we generated route subnetwork for three emergency response operations conducted by The National Agency for Disaster Countermeasure (BNPB) of Indonesia:
 
@@ -223,7 +214,7 @@ In order to validate and test performance of our proposed system, we generated r
 
 The locations/POI data were collected mainly from BNPB Contigency Plan (\textit{RenKon}) which are available publicly in \url{http://renkon.bnpb.go.id/}. While the OSM (PBF) data were provided by OpenStreetMap Indonesia in their website \url{https://openstreetmap.id/en/data-openstreetmap-indonesia/}. The PBF files were converted to network files (*.pycgrc and *.json) using osmconvert\cite{OpenStreetMap2019OsmConvert} and OsmRoadToGraph\cite{Gemsa2017OsmToRoadGraph} as explained in the previous section. Finally, the risk layer images and pixel-to-coordinates samples were manually collected from InaRISK website as mentioned in the previous section.
 
-We used a computer provided by Faculty of Computer Science, Universitas Indonesia, with following specifications used to run the experiments:
+We used two computers to run the experiment. The first one was a PC-server provided by Faculty of Computer Science, Universitas Indonesia, with following specifications:
 
 \begin{itemize}
 \item CPU: AMD Ryzen Threadripper 3970X (32 Cores)
@@ -232,7 +223,16 @@ We used a computer provided by Faculty of Computer Science, Universitas Indonesi
 \item OS: Ubuntu 18.04
 \end{itemize}
 
-We ran each of the process three times and obtained results shown in Table \ref{table_experiment_results}:
+The other one is a consumer notebook with following specifications:
+
+\begin{itemize}
+\item CPU: Intel Core i7 5500U (2 Cores)
+\item RAM: DDR3L 12 GB
+\item Storage: SSD 1 TB
+\item OS: Ubuntu 20.04
+\end{itemize}
+
+We ran each of the process three times on each computers and obtained results shown in Table \ref{table_experiment_results}:
 
 \begin{itemize}
 \item \textbf{Operation}: The emergency operation name describing the location, the disaster, and the year
@@ -251,24 +251,25 @@ Based on the result of our experiments, we concluded that the processing time is
 \item \textbf{The area of the map}. Operation map with bigger area most of the time has a number of POI separated by long distance. The longer the distance, the more number of nodes that need to be processed during the shortest path finding which eventually increses the processing time
 \end{enumerate}
 
+We also observe that although increasing the number of computational power (CPU cores and RAM) significantly reduces the processing time for the largest operation (Lombok earthquake 2018), the improvement is not proportional to the computational power. In our experiment, using machine with 16 times of CPU cores only reduced the processing time by half (Figure \ref{fig_average_processing_time_chart}) which indicates that the shortest path algorithm used in our system doesn't not scale very well.
+
 \begin{figure}
-\centerline{\includegraphics[scale=0.25]{subnetwork-visualization-zoom-1-yogyakarta.png}}
+\centerline{\includegraphics[scale=0.23]{subnetwork-visualization-zoom-1-yogyakarta.png}}
 \caption{Visualization of Yogyakarta's subnetwork during earthquake disaster in 2020}
 \label{fig_yogyakarta_subnetwork_visualized}
 \end{figure}
 
 \begin{figure}
-\centerline{\includegraphics[scale=0.25]{subnetwork-visualization-zoom-1-jakarta.png}}
+\centerline{\includegraphics[scale=0.24]{subnetwork-visualization-zoom-1-jakarta.png}}
 \caption{Visualization of Jakarta's subnetwork during flood disaster in 2013}
 \label{fig_jakarta_subnetwork_visualized}
 \end{figure}
 
 \begin{figure}
-\centerline{\includegraphics[scale=0.25]{subnetwork-visualization-zoom-1-lombok.png}}
+\centerline{\includegraphics[scale=0.24]{subnetwork-visualization-zoom-1-lombok.png}}
 \caption{Visualization of Lombok's subnetwork during earthquake disaster in 2018}
 \label{fig_lombok_subnetwork_visualized}
 \end{figure}
-
 
 In order to be able to validate the generated network easily, we created as simple web server to visualize the subnetwork on top of interactive map from \url{https://mapbox.com}. The visualization of partial of subnetwork for Yogyakarta earthquake (2020), Jakarta flood (2013), and Lombok earthquake (2018) are shown respectively in Figure \ref{fig_yogyakarta_subnetwork_visualized}, Figure \ref{fig_jakarta_subnetwork_visualized}, and Figure \ref{fig_lombok_subnetwork_visualized}. The blue lines represent the available roads. While the icons represent the locations/POI: 
 
@@ -279,7 +280,6 @@ In order to be able to validate the generated network easily, we created as simp
 \item Blue icon for warehouse
 \item Red icon for damaged infrastructure
 \end{itemize}
-
 
 \section{Conclusion}
 
